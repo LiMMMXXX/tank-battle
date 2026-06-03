@@ -259,22 +259,22 @@ function generateMap() {
         }
     }
 
-    // Protect the base
+    // Protect the base (rows 21-22, above player spawn area)
     const baseC = Math.floor(COLS / 2);
-    const baseR = ROWS - 2;
-    map[baseR - 1][baseC] = BASE;
-    // Brick walls around base
+    const baseR = ROWS - 5;  // base at row 21
+    map[baseR][baseC] = BASE;
+    // Brick walls around base (U-shape, open at bottom for player defense)
+    map[baseR + 1][baseC - 1] = BRICK;
+    map[baseR + 1][baseC] = BRICK;
+    map[baseR + 1][baseC + 1] = BRICK;
     map[baseR][baseC - 1] = BRICK;
-    map[baseR][baseC] = BRICK;
     map[baseR][baseC + 1] = BRICK;
-    map[baseR - 1][baseC - 1] = BRICK;
-    map[baseR - 1][baseC + 1] = BRICK;
 
-    // Clear player spawn area
+    // Clear player spawn area (below base, rows 24-25, center columns)
     const pCol = Math.floor(COLS / 2);
-    for (let r = 1; r <= 2; r++) {
-        for (let c = pCol - 2; c <= pCol + 2; c++) {
-            if (c >= 0 && c < COLS && r >= 0 && r < ROWS) {
+    for (let r = ROWS - 3; r <= ROWS - 2; r++) {
+        for (let c = pCol - 3; c <= pCol + 3; c++) {
+            if (c > 0 && c < COLS - 1 && r > 0 && r < ROWS - 1) {
                 map[r][c] = EMPTY;
             }
         }
@@ -364,7 +364,7 @@ class Tank {
         return true;
     }
 
-    move(direction, mapOnly = false) {
+    move(direction) {
         this.dir = direction;
         const spd = this.speed * CELL;
         let nx = this.x;
@@ -377,24 +377,26 @@ class Tank {
             case RIGHT: nx += spd; break;
         }
 
-        // Snap to grid when not aligned (for better navigation)
-        if (direction === UP || direction === DOWN) {
-            const gridX = Math.round(this.x / CELL) * CELL;
-            if (Math.abs(this.x - gridX) < spd * 2) {
-                this.x = gridX;
-            }
-        } else {
-            const gridY = Math.round(this.y / CELL) * CELL;
-            if (Math.abs(this.y - gridY) < spd * 2) {
-                this.y = gridY;
-            }
-        }
-
+        // Try full movement first
         if (this.canMoveTo(nx, ny)) {
             this.x = nx;
             this.y = ny;
             return true;
         }
+
+        // Slide along walls: try axis-aligned movement
+        if (direction === UP || direction === DOWN) {
+            if (this.canMoveTo(this.x, ny)) {
+                this.y = ny;
+                return true;
+            }
+        } else {
+            if (this.canMoveTo(nx, this.y)) {
+                this.x = nx;
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -473,7 +475,7 @@ class Tank {
             }
 
             // Move or try another direction if blocked
-            if (!this.move(this.moveDirection, true)) {
+            if (!this.move(this.moveDirection)) {
                 this.moveDirection = Math.floor(Math.random() * 4);
                 this.move(this.moveDirection);
             }
@@ -751,10 +753,10 @@ function initGame() {
 
     generateMap();
 
-    // Player tank
+    // Player tank (spawn below base, at row 24.5)
     player = new Tank(
         Math.floor(COLS / 2) * CELL + CELL / 2,
-        (ROWS - 2) * CELL + CELL / 2,
+        (ROWS - 1.5) * CELL,
         UP,
         '#2ecc40',
         false
@@ -778,7 +780,7 @@ function nextLevel() {
     generateMap();
 
     player.x = Math.floor(COLS / 2) * CELL + CELL / 2;
-    player.y = (ROWS - 2) * CELL + CELL / 2;
+    player.y = (ROWS - 1.5) * CELL;
     player.dir = UP;
     player.shieldActive = false;
     player.rapidFire = false;
@@ -1059,7 +1061,7 @@ function update() {
                 } else {
                     // Respawn player
                     player.x = Math.floor(COLS / 2) * CELL + CELL / 2;
-                    player.y = (ROWS - 2) * CELL + CELL / 2;
+                    player.y = (ROWS - 1.5) * CELL;
                     player.dir = UP;
                     player.shieldActive = true;
                     player.shieldTimer = 150;
