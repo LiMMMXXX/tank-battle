@@ -961,8 +961,6 @@ function draw() {
 
 // --- Main Loop ---
 
-let lastFrameTime = 0;
-
 function gameLoop(timestamp) {
     if (lastFrameTime === 0) lastFrameTime = timestamp;
     const dt = Math.min((timestamp - lastFrameTime) / 1000, 0.1);
