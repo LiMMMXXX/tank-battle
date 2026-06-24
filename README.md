@@ -38,15 +38,28 @@ python -m http.server 8000
 # 访问 http://localhost:8000
 ```
 
-## 📸 截图
-
-![坦克大战游戏截图](screenshot.png)
-
 ## 🛠️ 技术栈
 
 - HTML5 Canvas
 - Vanilla JavaScript (ES6+)
 - 纯CSS动画
+- 分离式文件结构
+
+## 📁 文件结构
+
+```
+tank-battle/
+├── index.html    # HTML 骨架
+├── style.css     # 所有样式
+├── game.js       # 游戏逻辑
+└── README.md
+```
+
+## ⚡ 优化特性
+
+- **Delta Time 游戏循环** — 移动/射击/计时器全部基于真实时间，60Hz/144Hz/240Hz 体验一致
+- **状态驱动输入** — keydown/keyup 跟踪按键状态，消除 OS 按键重复延迟
+- **模块化代码** — HTML/CSS/JS 分离，便于维护
 
 ## 📄 许可
 

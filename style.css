@@ -1,0 +1,139 @@
+/* =========================== */
+/*  坦克大战 - Tank Battle      */
+/* =========================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #0a0a0a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Courier New', monospace;
+    overflow: hidden;
+    user-select: none;
+}
+
+.game-wrapper {
+    position: relative;
+    border: 3px solid #444;
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.15), inset 0 0 30px rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+}
+
+canvas {
+    display: block;
+    background: #1a1a2e;
+}
+
+.hud {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: #0f0;
+    font-size: 14px;
+    pointer-events: none;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.hud span {
+    color: #ff0;
+    font-weight: bold;
+}
+
+.hud .lives {
+    color: #f44;
+}
+
+.controls-info {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #888;
+    font-size: 11px;
+    pointer-events: none;
+    text-align: center;
+}
+
+.game-over-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+.game-over-screen.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.game-over-screen h1 {
+    font-size: 48px;
+    color: #f44;
+    text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+    margin-bottom: 20px;
+}
+
+.game-over-screen .final-score {
+    font-size: 24px;
+    color: #ff0;
+    margin-bottom: 30px;
+}
+
+.game-over-screen button {
+    padding: 12px 40px;
+    font-size: 18px;
+    font-family: 'Courier New', monospace;
+    background: #0f0;
+    color: #000;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.game-over-screen button:hover {
+    background: #0c0;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+    transform: scale(1.05);
+}
+
+.level-up {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ff0;
+    font-size: 36px;
+    font-weight: bold;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+    text-shadow: 0 0 30px rgba(255, 255, 0, 0.5);
+}
+
+.level-up.active {
+    opacity: 1;
+    animation: levelPulse 0.5s ease-in-out 3;
+}
+
+@keyframes levelPulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.3); }
+}
